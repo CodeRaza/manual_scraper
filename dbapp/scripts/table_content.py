@@ -23,19 +23,21 @@ def get_table_content(url_):
         url = url_
         driver.get(url)
 
-        manual_header_title = WebDriverWait(driver, 20).until(
+        manual_header_title = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.manual-header__title-wrap h1'))
         )
 
         h1_text = manual_header_title.text
 
-        button = WebDriverWait(driver, 20).until(
+        button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'modal-toc2'))
         )
+        
+        driver.execute_script("arguments[0].scrollIntoView(true);", button)
 
         button.click()
 
-        modal_content = WebDriverWait(driver, 20).until(
+        modal_content = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'simplebar-content'))
         )
         
