@@ -3,14 +3,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 def get_table_content(url_):
         
     options = webdriver.ChromeOptions()
     options.add_argument('--headless') 
-    driver = webdriver.Chrome(options=options)
+    # driver = webdriver.Chrome(options=options)
     # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
 
     try:

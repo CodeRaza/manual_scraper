@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import weasyprint
 from django.conf import settings
 import os
+from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
 def get_pdf_text(url_, title, output_directory='pdfs/'):
@@ -15,10 +16,11 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
 
     options = webdriver.ChromeOptions()
     options.add_argument('--headless') 
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     
 
     try:
-        driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         
         driver.get(url)
