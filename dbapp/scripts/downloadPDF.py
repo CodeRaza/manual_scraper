@@ -9,18 +9,20 @@ from django.conf import settings
 import os
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 def get_pdf_text(url_, title, output_directory='pdfs/'):
         
     url = url_
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless') 
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--headless') 
+
+    options = Options()
+    options.headless = True
     # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # driver = webdriver.Chrome(options=options)
     driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
-
-    
 
     try:
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)

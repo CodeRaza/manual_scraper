@@ -5,11 +5,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 def get_table_content(url_):
         
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless') 
+    # options = webdriver.ChromeOptions()
+    options = Options()
+    options.headless = True
+    
+    # options.add_argument('--headless') 
     # driver = webdriver.Chrome(options=options)
     # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
