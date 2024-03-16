@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import weasyprint
 from django.conf import settings
 import os
+from webdriver_manager.chrome import ChromeDriverManager
 
 def get_pdf_text(url_, title, output_directory='pdfs/'):
         
@@ -17,7 +18,9 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
     
 
     try:
-        driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        
         driver.get(url)
 
         wait = WebDriverWait(driver, 10)
