@@ -33,9 +33,9 @@ def get_table_content(url_):
             EC.element_to_be_clickable((By.ID, 'modal-toc2'))
         )
         
-        driver.execute_script("arguments[0].scrollIntoView(true);", button)
+        driver.execute_script("arguments[0].click();", button)
 
-        button.click()
+        # button.click()
 
         modal_content = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'simplebar-content'))
