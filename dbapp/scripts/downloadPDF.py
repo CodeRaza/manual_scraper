@@ -16,11 +16,11 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
 
     options = webdriver.ChromeOptions()
     options.add_argument('--headless') 
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(options=options)
     
 
     try:
-        # driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         
         driver.get(url)
