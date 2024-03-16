@@ -9,8 +9,8 @@ def get_table_content(url_):
         
     options = webdriver.ChromeOptions()
     options.add_argument('--headless') 
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Chrome(options=options)
+    # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 
     try:

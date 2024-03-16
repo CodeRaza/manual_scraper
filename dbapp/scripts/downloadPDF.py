@@ -18,8 +18,8 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
     
 
     try:
-        # driver = webdriver.Chrome(options=options)
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         
         driver.get(url)
 
