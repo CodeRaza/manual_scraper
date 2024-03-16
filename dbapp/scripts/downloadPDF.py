@@ -23,7 +23,7 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
         
         driver.get(url)
 
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'page-doc')))
 
         all_html = ''
