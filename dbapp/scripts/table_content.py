@@ -10,9 +10,12 @@ def get_table_content(url_):
         
     options = webdriver.ChromeOptions()
     options.add_argument('--headless') 
-    driver = webdriver.Chrome(options=options)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    
+    # driver = webdriver.Chrome(options=options)
     # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # driver = webdriver.Chrome("/usr/bin/chromedriver", options=options)
 
 
