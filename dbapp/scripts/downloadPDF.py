@@ -46,8 +46,13 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
 
            
             next_button = driver.find_element(By.CLASS_NAME, 'pag-pnext')
-            next_button.click()
+            
+            if 'disabled' in next_button.get_attribute('class'):
+                break  # Break out of loop if next button is disabled
+            else:
+                next_button.click()
 
+            wait.until(EC.staleness_of(page_html))
             wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'page-doc')))
 
     except Exception as e:
