@@ -60,7 +60,12 @@ def get_manuals_models(url, brand):
                                             articles_count = Article.objects.filter(doc=doc_type_model).count()
                                             if articles_count > 0:
                                                 table_content = get_table_content(url_=link)
-                                                the_pdf = get_pdf_text(url_=link, title=table_content['title'])
+                                                # the_pdf = get_pdf_text(url_=link, title=table_content['title'])
+                                                try:
+                                                    the_pdf = get_pdf_text(url_=link, title=table_content['title'])
+                                                except Exception as e:
+                                                    print(f"An error occurred: {e}")
+                                                    
                                                 if the_pdf is not None and table_content is not None:
                                                     article, article_created = Article.objects.get_or_create(
                                                         doc=doc_type_model, 
@@ -82,8 +87,12 @@ def get_manuals_models(url, brand):
                                         doc_type_model.save()
                                         
                                         table_content = get_table_content(url_=link)
-                                        the_pdf = get_pdf_text(url_=link, title=table_content['title'])
                                         
+                                        try:
+                                            the_pdf = get_pdf_text(url_=link, title=table_content['title'])
+                                        except Exception as e:
+                                            print(f"An error occurred: {e}")
+                                            
                                         if the_pdf is not None and table_content is not None:
                                             article, article_created = Article.objects.get_or_create(
                                                 doc=doc_type_model, 
