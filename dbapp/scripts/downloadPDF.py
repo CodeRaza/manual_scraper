@@ -37,24 +37,23 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
         all_text = ''
 
         while True:
-            try:
-                page_html = driver.find_element(By.CLASS_NAME, 'page-doc').get_attribute('outerHTML')
-                all_html += page_html
-                
-                soup = BeautifulSoup(page_html, 'html.parser')
-                page_text = soup.get_text('\n', strip=True)
-                all_text += page_text
+            page_html = driver.find_element(By.CLASS_NAME, 'page-doc').get_attribute('outerHTML')
+            all_html += page_html
+            
+            soup = BeautifulSoup(page_html, 'html.parser')
+            page_text = soup.get_text('\n', strip=True)
+            all_text += page_text
 
-                next_button = driver.find_element(By.CLASS_NAME, 'pag-pnext')
-                if 'disabled' in next_button.get_attribute('class'):
-                    break  # Break out of loop if next button is disabled
-                else:
-                    next_button.click()
+            next_button = driver.find_element(By.CLASS_NAME, 'pag-pnext')
 
-                    wait.until(EC.staleness_of(page_html))  # Wait for the page to be stale
-                    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'page-doc')))  # Wait for next page to load
-            except NoSuchElementException:
-                break 
+            if 'disabled' in next_button.get_attribute('class'):
+                break  # No more pages left, exit the loop
+            
+            next_button.click()
+
+            # Wait until either the next page is loaded or a loading spinner disappears
+            wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'page-doc')))
+
     except Exception as e:
         print(f"An error occurred: {e}")
 
