@@ -58,28 +58,31 @@ def get_manuals_models(url, brand):
                                     
                                     if doc_type_model:
                                             articles_count = Article.objects.filter(doc=doc_type_model).count()
-                                            if articles_count > 0:
+                                            if articles_count < 1:
                                                 table_content = get_table_content(url_=link)
                                                 # the_pdf = get_pdf_text(url_=link, title=table_content['title'])
+                                                the_pdf = None
+                                                
                                                 try:
                                                     the_pdf = get_pdf_text(url_=link, title=table_content['title'])
-                                                    
-                                                    if the_pdf is not None and table_content is not None:
-                                                        article, article_created = Article.objects.get_or_create(
-                                                            doc=doc_type_model, 
-                                                            title=table_content['title'], 
-                                                            table_content=table_content['content_table'],
-                                                            text=the_pdf['text'],
-                                                            pdf_file=the_pdf['pdf']
-                                                        )
-                                                        
-                                                        if article_created:
-                                                            article.save()
-                                                            print(f"Created Article: {article}")
-                                                        else:
-                                                            print(f"Article already exists: {article}")
                                                 except Exception as e:
                                                     print(f"ERROR: {e}")
+                                                    
+                                                if the_pdf is not None and table_content is not None:
+                                                    article, article_created = Article.objects.get_or_create(
+                                                        doc=doc_type_model, 
+                                                        title=table_content['title'], 
+                                                        table_content=table_content['content_table'],
+                                                        text=the_pdf['text'],
+                                                        pdf_file=the_pdf['pdf']
+                                                    )
+                                                    
+                                                    if article_created:
+                                                        article.save()
+                                                        print(f"Created Article: {article}")
+                                                    else:
+                                                        print(f"Article already exists: {article}")
+                                            
                                             else:
                                                 print("ARTICAL Exists")
 
@@ -88,26 +91,27 @@ def get_manuals_models(url, brand):
                                         
                                         table_content = get_table_content(url_=link)
                                         
+                                        the_pdf = None
+                                                
                                         try:
                                             the_pdf = get_pdf_text(url_=link, title=table_content['title'])
-                                        
-                                            
-                                            if the_pdf is not None and table_content is not None:
-                                                article, article_created = Article.objects.get_or_create(
-                                                    doc=doc_type_model, 
-                                                    title=table_content['title'], 
-                                                    table_content=table_content['content_table'],
-                                                    text=the_pdf['text'],
-                                                    pdf_file=the_pdf['pdf']
-                                                )
-                                                
-                                                if article_created:
-                                                    article.save()
-                                                    print(f"Created Article: {article}")
-                                                else:
-                                                    print(f"Article already exists: {article}")
                                         except Exception as e:
                                             print(f"ERROR: {e}")
+                                       
+                                        if the_pdf is not None and table_content is not None:
+                                            article, article_created = Article.objects.get_or_create(
+                                                doc=doc_type_model, 
+                                                title=table_content['title'], 
+                                                table_content=table_content['content_table'],
+                                                text=the_pdf['text'],
+                                                pdf_file=the_pdf['pdf']
+                                            )
+                                            
+                                            if article_created:
+                                                article.save()
+                                                print(f"Created Article: {article}")
+                                            else:
+                                                print(f"Article already exists: {article}")
                                     else:
                                         print(f"DocumentType already exists: {doc_type_model}")
 
