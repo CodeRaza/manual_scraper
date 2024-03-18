@@ -9,6 +9,7 @@ from django.conf import settings
 import os
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException
 
 def get_pdf_text(url_, title, output_directory='pdfs/'):
         
@@ -19,12 +20,13 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     
 
     try:
         # driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
         
         driver.get(url)
 
@@ -35,26 +37,24 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
         all_text = ''
 
         while True:
+            try:
+                page_html = driver.find_element(By.CLASS_NAME, 'page-doc').get_attribute('outerHTML')
+                all_html += page_html
+                
+                soup = BeautifulSoup(page_html, 'html.parser')
+                page_text = soup.get_text('\n', strip=True)
+                all_text += page_text
 
-            page_html = driver.find_element(By.CLASS_NAME, 'page-doc').get_attribute('outerHTML')
-            all_html += page_html
-            
-            
-            soup = BeautifulSoup(page_html, 'html.parser')
-            page_text = soup.get_text('\n', strip=True)
-            all_text += page_text
+                next_button = driver.find_element(By.CLASS_NAME, 'pag-pnext')
+                if 'disabled' in next_button.get_attribute('class'):
+                    break  # Break out of loop if next button is disabled
+                else:
+                    next_button.click()
 
-           
-            next_button = driver.find_element(By.CLASS_NAME, 'pag-pnext')
-            
-            if 'disabled' in next_button.get_attribute('class'):
-                break  # Break out of loop if next button is disabled
-            else:
-                next_button.click()
-
-            wait.until(EC.staleness_of(page_html))
-            wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'page-doc')))
-
+                    wait.until(EC.staleness_of(page_html))  # Wait for the page to be stale
+                    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'page-doc')))  # Wait for next page to load
+            except NoSuchElementException:
+                break 
     except Exception as e:
         print(f"An error occurred: {e}")
 
@@ -62,16 +62,16 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
         if driver:
             driver.quit()
 
-        if all_html and all_text:
-            media_root = settings.MEDIA_ROOT
-            pdf_path = os.path.join(media_root, output_directory, f'{title}.pdf')
+    if all_html and all_text:
+        media_root = settings.MEDIA_ROOT
+        pdf_path = os.path.join(media_root, output_directory, f'{title}.pdf')
 
-            # Ensure the directory exists, create it if not
-            os.makedirs(os.path.join(media_root, output_directory), exist_ok=True)
+        # Ensure the directory exists, create it if not
+        os.makedirs(os.path.join(media_root, output_directory), exist_ok=True)
 
-            weasyprint.HTML(string=all_html).write_pdf(pdf_path)
-            return {'text': all_text, "pdf": f'pdfs/{title}.pdf'}
+        weasyprint.HTML(string=all_html).write_pdf(pdf_path)
+        return {'text': all_text, "pdf": f'pdfs/{title}.pdf'}
 
-        else:
-            print("No HTML content to convert to PDF.")
-            return {'text': None, "pdf": None}
+    else:
+        print("No HTML content to convert to PDF.")
+        return {'text': None, "pdf": None}
