@@ -61,16 +61,16 @@ def get_pdf_text(url_, title, output_directory='pdfs/'):
         if driver:
             driver.quit()
 
-        if all_html and all_text:
-            media_root = settings.MEDIA_ROOT
-            pdf_path = os.path.join(media_root, output_directory, f'{title}.pdf')
+    if all_html and all_text:
+        media_root = settings.MEDIA_ROOT
+        pdf_path = os.path.join(media_root, output_directory, f'{title}.pdf')
 
-            # Ensure the directory exists, create it if not
-            os.makedirs(os.path.join(media_root, output_directory), exist_ok=True)
+        # Ensure the directory exists, create it if not
+        os.makedirs(os.path.join(media_root, output_directory), exist_ok=True)
 
-            weasyprint.HTML(string=all_html).write_pdf(pdf_path)
-            return {'text': all_text, "pdf": f'pdfs/{title}.pdf'}
+        weasyprint.HTML(string=all_html).write_pdf(pdf_path)
+        return {'text': all_text, "pdf": f'pdfs/{title}.pdf'}
 
-        else:
-            print("No HTML content to convert to PDF.")
-            return {'text': None, "pdf": None}
+    else:
+        print("No HTML content to convert to PDF.")
+        return {'text': None, "pdf": None}
