@@ -39,7 +39,7 @@ def scrape_and_download_manuals():
                 
                 scrape_pdf(manual_link, product, product_name)
                 
-                if not Manual.objects.filter(product=product, title=product_name).exists():
+                if Manual.objects.filter(product=product, title=product_name).count() < 1:
                     scrape_pdf(manual_link, product, product_name)
                 else:
                     print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")

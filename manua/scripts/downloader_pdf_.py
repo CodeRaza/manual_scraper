@@ -32,6 +32,8 @@ def scrape_pdf(base_url, product, manual_name):
             print(current_url)
             driver.get(current_url)
 
+            print(driver.page_source)
+
             iframes = driver.find_elements(By.TAG_NAME, 'iframe')
            
             for iframe in iframes:
