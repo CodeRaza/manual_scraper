@@ -17,6 +17,10 @@ options.add_argument('--disable-dev-shm-usage')
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
+def remove_element_by_class(class_name):
+    script = f"document.querySelectorAll('.{class_name}').forEach(e => e.remove());"
+    driver.execute_script(script)
+
 def scrape_pdf(base_url, product, manual_name):
     try:
         page_number = 1
@@ -29,8 +33,11 @@ def scrape_pdf(base_url, product, manual_name):
             driver.get(current_url)
 
             iframes = driver.find_elements(By.TAG_NAME, 'iframe')
+           
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
+            
+            remove_element_by_class('cookie-consent-popup')
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
 
