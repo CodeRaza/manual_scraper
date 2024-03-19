@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*', "164.90.171.173"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     "dbapp",
     'django_extensions',
     'rest_framework',
+    "manua"
 ]
 
 MIDDLEWARE = [
