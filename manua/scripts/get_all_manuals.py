@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import time
-from manua.models import Product  
+from manua.models import Product, Manual  
 # from pdf_downloader import download_pdf  # Import your PDF downloader function
 # Set up Selenium Chrome WebDriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -36,7 +36,13 @@ def scrape_and_download_manuals():
                 manual_link = link_element.get_attribute('href')
                 product_name_element = link_element.find_element(By.TAG_NAME, 'h5')
                 product_name = product_name_element.text.strip()
+                
                 scrape_pdf(manual_link, product, product_name)
+                
+                if not Manual.objects.filter(product=product, title=product_name).exists():
+                    scrape_pdf(manual_link, product, product_name)
+                else:
+                    print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
 
         except Exception as e:
             print(f"Error downloading manuals for {product.title}: {e}")
