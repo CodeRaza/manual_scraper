@@ -7,9 +7,15 @@ import os
 from manua.models import Manual  # Import the Manual model from your app
 from django.core.files import File
 
-chrome_options = Options()
-chrome_options.add_argument('--headless') 
-driver = webdriver.Chrome(options=chrome_options)
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless') 
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
 def scrape_pdf(base_url, product, manual_name):
     try:

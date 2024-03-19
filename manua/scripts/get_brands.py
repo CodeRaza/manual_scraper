@@ -6,11 +6,15 @@ from bs4 import BeautifulSoup
 import time
 from manua.models import Brand
 
-# Set up Selenium Chrome WebDriver
-chrome_options = Options()
-chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
-driver = webdriver.Chrome(options=chrome_options)
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
+options = webdriver.ChromeOptions()
+options.add_argument('--headless') 
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 # Function to click on the "nav__more" link to load all brand elements
 def click_nav_more():
     try:

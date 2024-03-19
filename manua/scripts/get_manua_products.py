@@ -4,14 +4,20 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 from manua.models import Brand, Product
+# Set up Selenium Chrome WebDriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 def scrape_products(brand_link):
     try:
         base_url = "https://www.manua.ls"
         # Set up Selenium Chrome WebDriver
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')  
-        driver = webdriver.Chrome(options=chrome_options)
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless') 
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
         # Click on the "show more" button to load all product elements
         driver.get(brand_link)

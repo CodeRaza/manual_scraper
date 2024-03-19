@@ -5,12 +5,20 @@ from selenium.webdriver.chrome.options import Options
 import time
 from manua.models import Product  
 # from pdf_downloader import download_pdf  # Import your PDF downloader function
+# Set up Selenium Chrome WebDriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+
+
 from manua.scripts.downloader_pdf_ import scrape_pdf
 def scrape_and_download_manuals():
-    # Set up Selenium Chrome WebDriver
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
-    driver = webdriver.Chrome(options=chrome_options)
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless') 
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
     # Get all saved products
     products = Product.objects.all()
