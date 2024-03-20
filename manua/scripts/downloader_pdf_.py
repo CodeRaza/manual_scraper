@@ -43,7 +43,7 @@ def scrape_pdf(base_url, product, manual_name):
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
             
             # remove_element_by_class('cookie-consent-popup')
-            WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//button[contains(@title,'AGREE')]"))).click()
+            # WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//button[contains(@title,'AGREE')]"))).click()
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
 
