@@ -28,10 +28,18 @@ def scrape_pdf(base_url, product, manual_name):
     try:
         page_number = 1
         screenshots = []
+        
+        n = 1
 
         while True:
 
+            if n != 1:
+                if driver.current_url == base_url:
+                    break
+            n+=1
+            
             current_url = f"{base_url}?p={page_number}"
+            
             print(current_url)
             driver.get(current_url)
             
@@ -62,9 +70,6 @@ def scrape_pdf(base_url, product, manual_name):
             screenshots.append(screenshot_file)
                 
             page_number += 1
-
-            if driver.current_url == base_url:
-                break
 
         with open(f"{manual_name}.pdf", "wb") as pdf_file:
             pdf_file.write(img2pdf.convert([open(img, "rb") for img in screenshots]))
