@@ -56,7 +56,16 @@ def scrape_pdf(base_url, product, manual_name):
             # WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//button[contains(@title,'AGREE')]"))).click()
             # cookie_close_button = driver.find_element(By.XPATH, '//button[text()="AGREE"]')
             # cookie_close_button.click()
+            # Implicit wait
             
+            driver.implicitly_wait(10)  # Adjust the wait time as needed
+            
+            popups = driver.find_elements(By.XPATH, '//*[contains(text(), "WE VALUE YOUR PRIVACY")]')
+            
+            if popups:
+                agree_button = driver.find_element(By.XPATH, '//*[text()="AGREE"]')
+                agree_button.click()
+
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
             
             driver.execute_script("var iframes = arguments[0].querySelectorAll('iframe'); for(var i = 0; i < iframes.length; i++) { iframes[i].remove(); }", pdf_div)
