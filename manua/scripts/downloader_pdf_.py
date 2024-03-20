@@ -64,12 +64,12 @@ def scrape_pdf(base_url, product, manual_name):
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
                 
-            txt += str(pdf_div.get_attribute('innerHTML'))
+            txt += str(driver.page_source)
 
             # print("Clicked on the Agree button")
             
             with open('log.txt', 'w') as f:
-                f.write(str(pdf_div))
+                f.write(str(pdf_div.get_attribute('innerHTML')))
 
             driver.set_window_size(1920, 2000)
 
