@@ -64,7 +64,7 @@ def scrape_pdf(base_url, product, manual_name):
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
                 
-            txt += str(driver.page_source)
+            txt += str(pdf_div.get_attribute('innerHTML'))
 
             # print("Clicked on the Agree button")
             
