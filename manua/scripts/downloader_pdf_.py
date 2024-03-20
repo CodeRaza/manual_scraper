@@ -16,6 +16,7 @@ options = webdriver.ChromeOptions()
 options.add_argument('--headless') 
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-cookies')
 options.add_argument('--disable-blink-features=AutomationControlled')
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
@@ -58,7 +59,7 @@ def scrape_pdf(base_url, product, manual_name):
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
             
 
-            print("Clicked on the Agree button")
+            # print("Clicked on the Agree button")
             
             with open('log.txt', 'w') as f:
                 f.write(str(driver.page_source))
