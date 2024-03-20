@@ -12,41 +12,45 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from manua.scripts.downloader_pdf_ import scrape_pdf
 def scrape_and_download_manuals():
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless') 
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-blink-features=AutomationControlled')
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless') 
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--disable-blink-features=AutomationControlled')
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+        # Get all saved products
+        products = Product.objects.all()
 
-    # Get all saved products
-    products = Product.objects.all()
+        # Iterate over each product
+        for product in products:
+            try:
+                driver.get(product.link)
+                time.sleep(2)
+                print(f"Going into the {product.title} & {product.link}")
 
-    # Iterate over each product
-    for product in products:
-        try:
-            driver.get(product.link)
-            time.sleep(2)
-            print(f"Going into the {product.title} & {product.link}")
+                manual_links = driver.find_elements(By.CSS_SELECTOR, '.d-flex.w-100.text-dark.text-decoration-none')
 
-            manual_links = driver.find_elements(By.CSS_SELECTOR, '.d-flex.w-100.text-dark.text-decoration-none')
+                for link_element in manual_links:
+                    manual_link = link_element.get_attribute('href')
+                    product_name_element = link_element.find_element(By.TAG_NAME, 'h5')
+                    product_name = product_name_element.text.strip()
+                    
+                    if Manual.objects.filter(title=product_name).count() < 1:
+                        scrape_pdf(manual_link, product, product_name)
+                    else:
+                        print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
 
-            for link_element in manual_links:
-                manual_link = link_element.get_attribute('href')
-                product_name_element = link_element.find_element(By.TAG_NAME, 'h5')
-                product_name = product_name_element.text.strip()
-                
-                if Manual.objects.filter(title=product_name).count() < 1:
-                    scrape_pdf(manual_link, product, product_name)
-                else:
-                    print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
+            except Exception as e:
+                print(f"Error downloading manuals for {product.title}: {e}")
 
-        except Exception as e:
-            print(f"Error downloading manuals for {product.title}: {e}")
+    except Exception as e:
+        print(f"Error initializing WebDriver: {e}")
 
-        finally:
+    finally:
+        if 'driver' in locals():
             driver.quit()
 
 def run():
