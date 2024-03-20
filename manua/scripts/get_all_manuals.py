@@ -40,7 +40,7 @@ def scrape_and_download_manuals():
                 
                 scrape_pdf(manual_link, product, product_name)
                 
-                if Manual.objects.filter(product=product, title=product_name).count() < 1:
+                if Manual.objects.filter(title=product_name).count() < 1:
                     scrape_pdf(manual_link, product, product_name)
                 else:
                     print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
@@ -48,7 +48,8 @@ def scrape_and_download_manuals():
         except Exception as e:
             print(f"Error downloading manuals for {product.title}: {e}")
 
-    driver.quit()
+        finally:
+            driver.quit()
 
 def run():
     scrape_and_download_manuals()

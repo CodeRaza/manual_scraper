@@ -82,11 +82,11 @@ def scrape_pdf(base_url, product, manual_name):
 
         os.remove(f"{manual_name}.pdf")
         
-        return True
+        # return True
     
     except Exception as e:
         print(f"Error scraping PDF: {e}")
-        return False
+        # return False
 
     finally:
         driver.quit()
