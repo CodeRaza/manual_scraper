@@ -9,6 +9,8 @@ from django.core.files import File
 
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless') 
@@ -32,8 +34,8 @@ def scrape_pdf(base_url, product, manual_name):
             current_url = f"{base_url}?p={page_number}"
             print(current_url)
             driver.get(current_url)
-
-            print(driver.page_source)
+            
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.viewer-page.viewer-container.active')))
 
             iframes = driver.find_elements(By.TAG_NAME, 'iframe')
            
