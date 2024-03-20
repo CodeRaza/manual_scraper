@@ -44,6 +44,8 @@ def scrape_and_download_manuals():
                 else:
                     print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
 
+                break
+            
         except Exception as e:
             print(f"Error downloading manuals for {product.title}: {e}")
 

@@ -43,6 +43,9 @@ def scrape_pdf(base_url, product, manual_name):
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
 
+            with open('log.txt', 'w') as f:
+                f.write(pdf_div)
+
             driver.set_window_size(1920, 2000)
 
             screenshot_file = f"page_{page_number}.png"
@@ -56,6 +59,7 @@ def scrape_pdf(base_url, product, manual_name):
 
         with open(f"{manual_name}.pdf", "wb") as pdf_file:
             pdf_file.write(img2pdf.convert([open(img, "rb") for img in screenshots]))
+
 
         print(f"Generated PDF: {manual_name}.pdf")
         
