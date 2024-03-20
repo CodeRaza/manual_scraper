@@ -66,7 +66,7 @@ def scrape_pdf(base_url, product, manual_name):
             # print("Clicked on the Agree button")
             
             with open('log.txt', 'w') as f:
-                f.write(str(pdf_div.get_attribute('innerHTML')))
+                f.write(str(pdf_div.get_attribute('outerHTML')))
 
             driver.set_window_size(1920, 2000)
 
