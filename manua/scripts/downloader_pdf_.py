@@ -31,6 +31,7 @@ def scrape_pdf(base_url, product, manual_name):
         screenshots = []
         
         n = 1
+        txt = ''
 
         while True:
 
@@ -57,7 +58,7 @@ def scrape_pdf(base_url, product, manual_name):
             # cookie_close_button.click()
             
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
-            
+            txt += str(driver.page_source)
 
             # print("Clicked on the Agree button")
             
@@ -81,7 +82,7 @@ def scrape_pdf(base_url, product, manual_name):
         manual = Manual.objects.create(
             product=product,
             title=manual_name,  # Assuming title is a field in your Product model
-            # text=product.description,  # Assuming description is a field in your Product model
+            text=txt,  # Assuming description is a field in your Product model
         )
         
         with open(f"{manual_name}.pdf", "rb") as f:
