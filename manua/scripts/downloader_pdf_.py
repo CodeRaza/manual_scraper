@@ -59,11 +59,8 @@ def scrape_pdf(base_url, product, manual_name):
             
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
             
-            iframes = pdf_div.find_elements(By.TAG_NAME, 'iframe')
-           
-            for iframe in iframes:
-                driver.execute_script("arguments[0].style.display = 'none';", iframe)
-                
+            driver.execute_script("var iframes = arguments[0].querySelectorAll('iframe'); for(var i = 0; i < iframes.length; i++) { iframes[i].remove(); }", pdf_div)
+    
             txt += str(driver.page_source)
 
             # print("Clicked on the Agree button")
