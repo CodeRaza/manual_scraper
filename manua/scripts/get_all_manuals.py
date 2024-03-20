@@ -38,8 +38,6 @@ def scrape_and_download_manuals():
                 product_name_element = link_element.find_element(By.TAG_NAME, 'h5')
                 product_name = product_name_element.text.strip()
                 
-                scrape_pdf(manual_link, product, product_name)
-                
                 if Manual.objects.filter(title=product_name).count() < 1:
                     scrape_pdf(manual_link, product, product_name)
                 else:
