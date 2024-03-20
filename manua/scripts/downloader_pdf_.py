@@ -18,6 +18,7 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-cookies')
 options.add_argument('--disable-blink-features=AutomationControlled')
+options.add_argument("--disable-popup-blocking")
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
@@ -51,14 +52,6 @@ def scrape_pdf(base_url, product, manual_name):
            
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
-            
-            # remove_element_by_class('cookie-consent-popup')
-            # WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"//button[contains(@title,'AGREE')]"))).click()
-            # cookie_close_button = driver.find_element(By.XPATH, '//button[text()="AGREE"]')
-            # cookie_close_button.click()
-            # Implicit wait
-            
-            # driver.implicitly_wait(10)  # Adjust the wait time as needed
             
             popups = driver.find_elements(By.XPATH, '//*[contains(text(), "WE VALUE YOUR PRIVACY")]')
             
