@@ -47,7 +47,7 @@ def scrape_pdf(base_url, product, manual_name):
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
 
             with open('log.txt', 'w') as f:
-                f.write(pdf_div)
+                f.write(str(pdf_div))
 
             driver.set_window_size(1920, 2000)
 
