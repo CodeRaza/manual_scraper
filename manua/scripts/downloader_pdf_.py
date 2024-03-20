@@ -42,7 +42,7 @@ def scrape_pdf(base_url, product, manual_name):
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
             
-            remove_element_by_class('cookie-consent-popup')
+            # remove_element_by_class('cookie-consent-popup')
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
 
