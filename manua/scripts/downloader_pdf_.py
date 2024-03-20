@@ -58,12 +58,18 @@ def scrape_pdf(base_url, product, manual_name):
             # cookie_close_button.click()
             
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
+            
+            iframes = pdf_div.find_elements(By.TAG_NAME, 'iframe')
+           
+            for iframe in iframes:
+                driver.execute_script("arguments[0].style.display = 'none';", iframe)
+                
             txt += str(driver.page_source)
 
             # print("Clicked on the Agree button")
             
             with open('log.txt', 'w') as f:
-                f.write(str(driver.page_source))
+                f.write(str(pdf_div))
 
             driver.set_window_size(1920, 2000)
 
