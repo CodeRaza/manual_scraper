@@ -58,13 +58,15 @@ def scrape_pdf(base_url, product, manual_name):
             # cookie_close_button.click()
             # Implicit wait
             
-            driver.implicitly_wait(10)  # Adjust the wait time as needed
+            # driver.implicitly_wait(10)  # Adjust the wait time as needed
             
             popups = driver.find_elements(By.XPATH, '//*[contains(text(), "WE VALUE YOUR PRIVACY")]')
             
             if popups:
                 agree_button = driver.find_element(By.XPATH, '//*[text()="AGREE"]')
                 agree_button.click()
+            else:
+                print("No PopUp Found")
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
             
