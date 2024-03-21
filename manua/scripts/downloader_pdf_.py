@@ -11,14 +11,16 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import logging
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless') 
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--disable-cookies')
-options.add_argument('--disable-blink-features=AutomationControlled')
-options.add_argument("--disable-popup-blocking")
+# options.add_argument('--disable-cookies')
+# options.add_argument('--disable-blink-features=AutomationControlled')
+# options.add_argument("--disable-popup-blocking")
+logging.basicConfig(filename='scraping.log', level=logging.ERROR)
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
@@ -32,7 +34,6 @@ def scrape_pdf(base_url, product, manual_name):
         screenshots = []
         
         n = 1
-        txt = ''
 
         while True:
 
@@ -53,24 +54,24 @@ def scrape_pdf(base_url, product, manual_name):
             for iframe in iframes:
                 driver.execute_script("arguments[0].style.display = 'none';", iframe)
             
-            popups = driver.find_elements(By.XPATH, '//*[contains(text(), "WE VALUE YOUR PRIVACY")]')
+            # popups = driver.find_elements(By.XPATH, '//*[contains(text(), "WE VALUE YOUR PRIVACY")]')
             
-            if popups:
-                agree_button = driver.find_element(By.XPATH, '//*[text()="AGREE"]')
-                agree_button.click()
-            else:
-                print("No PopUp Found")
+            # if popups:
+            #     agree_button = driver.find_element(By.XPATH, '//*[text()="AGREE"]')
+            #     agree_button.click()
+            # else:
+            #     print("No PopUp Found")
 
             pdf_div = driver.find_element(By.CSS_SELECTOR, '.viewer-page.viewer-container.active')
             
-            driver.execute_script("var iframes = arguments[0].querySelectorAll('iframe'); for(var i = 0; i < iframes.length; i++) { iframes[i].remove(); }", pdf_div)
+            # driver.execute_script("var iframes = arguments[0].querySelectorAll('iframe'); for(var i = 0; i < iframes.length; i++) { iframes[i].remove(); }", pdf_div)
     
-            txt += str(driver.page_source)
+            # txt += str(driver.page_source)
 
             # print("Clicked on the Agree button")
             
-            with open('log.txt', 'w') as f:
-                f.write(str(pdf_div.get_attribute('outerHTML')))
+            # with open('log.txt', 'w') as f:
+            #     f.write(str(pdf_div.get_attribute('outerHTML')))
 
             driver.set_window_size(1920, 2000)
 
@@ -83,13 +84,11 @@ def scrape_pdf(base_url, product, manual_name):
         with open(f"{manual_name}.pdf", "wb") as pdf_file:
             pdf_file.write(img2pdf.convert([open(img, "rb") for img in screenshots]))
 
-
         print(f"Generated PDF: {manual_name}.pdf")
         
         manual = Manual.objects.create(
             product=product,
-            title=manual_name,  # Assuming title is a field in your Product model
-            text=txt,  # Assuming description is a field in your Product model
+            title=manual_name,  # Assuming title is a field in your Product model  # Assuming description is a field in your Product model
         )
         
         with open(f"{manual_name}.pdf", "rb") as f:
@@ -101,11 +100,11 @@ def scrape_pdf(base_url, product, manual_name):
 
         os.remove(f"{manual_name}.pdf")
         
-        # return True
+        return True
     
     except Exception as e:
         print(f"Error scraping PDF: {e}")
-        # return False
+        return False
 
     finally:
         driver.quit()

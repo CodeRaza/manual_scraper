@@ -8,7 +8,7 @@ from manua.models import Product, Manual
 # Set up Selenium Chrome WebDriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-
+import random
 
 from manua.scripts.downloader_pdf_ import scrape_pdf
 def scrape_and_download_manuals():
@@ -17,7 +17,7 @@ def scrape_and_download_manuals():
         options.add_argument('--headless') 
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-blink-features=AutomationControlled')
+        # options.add_argument('--disable-blink-features=AutomationControlled')
 
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
@@ -28,7 +28,7 @@ def scrape_and_download_manuals():
         for product in products:
             try:
                 driver.get(product.link)
-                time.sleep(2)
+                # time.sleep(2)
                 print(f"Going into the {product.title} & {product.link}")
 
                 manual_links = driver.find_elements(By.CSS_SELECTOR, '.d-flex.w-100.text-dark.text-decoration-none')
@@ -39,6 +39,8 @@ def scrape_and_download_manuals():
                     product_name = product_name_element.text.strip()
                     
                     if Manual.objects.filter(title=product_name).count() < 1:
+                        delay = random.randint(5, 15)  # Random delay between 5 to 15 seconds
+                        time.sleep(delay)
                         scrape_pdf(manual_link, product, product_name)
                     else:
                         print(f"Manual '{product_name}' for product '{product}' already exists. Skipping.")
