@@ -42,13 +42,14 @@ def scrape_manual_details(base_url, product, manual_name):
                     table_rows = card.find_all('tr')
                     for row in table_rows:
                         key = row.find('td', class_='text-muted').text.strip()
-                        value = row.find('td').text.strip()
+                        value = row.find_all('td')[1].text.strip()
                         section_data[key] = value
                     
                     data[f"{section_name}"] = section_data
 
                 specs_data = json.dumps(data)
                 
+                # print(specs_data)
                 manual = Manual.objects.create(
                     product=product,
                     title=manual_name, 
