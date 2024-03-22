@@ -22,6 +22,7 @@ class Manual(models.Model):
     title = models.CharField(max_length=1000, blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     pdf = models.FileField(upload_to='manuals/', blank=True, null=True)
+    specs = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
